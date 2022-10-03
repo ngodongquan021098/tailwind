@@ -6,7 +6,11 @@
 //     menu.classList.toggle("invisible")
 // })
 
+//
 // Fashion page
+window.onbeforeunload = function () {
+  window.scrollTo(0, 0);
+}
 let dataCarousel = [
   {
     title: "Shop1",
@@ -178,10 +182,11 @@ function asyncTimeout(callback, timer) {
 }
 
 let firstLoadBanner = true;
+
 function onObservation(entries) {
   entries.forEach(async (el) => {
     if (
-      el.target.className.includes("banner") &&
+      el.target.className.includes("banner-main") &&
       el.isIntersecting &&
       firstLoadBanner
     ) {
@@ -229,15 +234,27 @@ function onObservation(entries) {
       //   .catch(err => {
       //     console.log(err)
       //   })
+    } else if (
+      el.target.className.includes("bg-banner-ecommerce") &&
+      el.isIntersecting
+    ) {
+      const elementImgEcommerce =
+        document.getElementsByClassName("img-ecommerce");
+      for (let i = 0; i < elementImgEcommerce.length; i++) {
+        elementImgEcommerce[i].className += " opacity-100 translate-y-0";
+      }
     }
   });
 }
 
 const observation = new IntersectionObserver(onObservation, {
-  threshold: 0.5,
+  threshold: 0,
 });
-const elementBanner = document.querySelector(".banner");
+const elementBanner = document.querySelector(".banner-main");
 observation.observe(elementBanner);
+
+const elementBannerEcommerce = document.querySelector(".bg-banner-ecommerce");
+observation.observe(elementBannerEcommerce);
 
 // promise
 async function test() {
@@ -279,10 +296,10 @@ Promise.all([promise1, promise2, promise3()])
     alert(err);
   });
 
-async function test2 () {
-  const a = await promise1
-  const b = await promise2
-  const c = await promise3()
-  console.log(a,b,c)
+async function test2() {
+  const a = await promise1;
+  const b = await promise2;
+  const c = await promise3();
+  console.log(a, b, c);
 }
-test2()
+test2();
